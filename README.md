@@ -77,6 +77,19 @@ First you set up the services on IBM Cloud. Then you set up the client applicati
 
 ![watsonstudiocreate](images/watsonstudiocreate.png)
 
+@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@
+
 ![watsonstudiocreate](images/ath12.png)
 
    - Click **Get Started**.
