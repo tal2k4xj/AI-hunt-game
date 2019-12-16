@@ -32,53 +32,56 @@ Android Game using IBM Watson Visual Recognition service, Text-to-Speech Service
 
 1. Sign up for an [IBM Cloud account](https://cloud.ibm.com/registration/).
 2. Install [Android Studio](https://developer.android.com/studio/)
-3. A dataset for the visual recognition model. Use these Sample [Datasets](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/datasets) or any dataset of your choice.
+3. A dataset for the visual recognition model. Use these Sample [Datasets](https://github.com/tal2k4xj/AI-hunt-game/tree/master/datasets) or any dataset of your choice.
 
 ## Estimated time
 
-This tutorial takes about 20 minutes to complete if you already have an IBM cloud account set up.
+This tutorial takes about 30 minutes to complete if you already have an IBM cloud account set up.
 
  ## Steps
  
 First you set up the services on IBM Cloud. Then you set up the client application.
 
-1. Create an instance of the [Watson Visual Recognition](https://www.ibm.com/watson/services/visual-recognition/) service and get your credentials:
+1. Create an instance of the `Watson Visual Recognition` service and get your credentials:
    - Go to the [Watson Visual Recognition](https://cloud.ibm.com/catalog/services/visual-recognition) page in the IBM Cloud Catalog.
    - Log in to your IBM Cloud account.
    - Click **Create**.
-   - Click **Service Credentials** > New Credentials > Add
-   
-![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ath3.png)
+  
+![watsoncreateservice](images/watsoncreateservice.png)
 
-   - Copy the `apikey` value, or copy the `username` and `password` values if your service instance doesn’t provide an `apikey`.
-   - Copy the `url` value.
+   - Go to Manage and copy the `apikey` value.
 
-![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ath4.png)
+![watsonvrcred](images/watsonvrcred.png)
 
 2. Create an instance of the App ID service and get your credentials:
    - Go to the [App ID](https://cloud.ibm.com/catalog/services/app-id) page in the IBM Cloud Catalog.
+   - Make sure the instance will create in London region.
    - Click **Create**.
-   - Click **Service Credentials** > New Credentials > Add
-   - Copy the `apikey` value, or copy the `username` and `password` values if your service instance doesn’t provide an `apikey`.
-   - Copy the `url` value.
+  
+![appidcreate](images/appidcreate.png)
    
-3. Create an instance of the App ID service and get your credentials:
+   - Click **Service Credentials** > New Credentials > Add
+   - Copy the `tenantId` value.
+   
+![appidcreds](images/appidcreds.png)
+
+3. Create an instance of the Text to Speech service and get your credentials:
    - Go to the [Text-to-Speech](https://cloud.ibm.com/catalog/services/text-to-speech) page in the IBM Cloud Catalog.
    - Click **Create**.
-   - Click **Service Credentials** > New Credentials > Add
-   - Copy the `apikey` value, or copy the `username` and `password` values if your service instance doesn’t provide an `apikey`.
-   - Copy the `url` value.
+   - Go to Manage and copy the `apikey` value (like in the visual recognition service).
    
 4. Create an instance of the Watson Studio
-   - Go to the [Watson Studio](https://cloud.ibm.com/catalog/services/watson-studio?bss_account=e366b6e4fb004c5eaccfbe7042b670a4) page in the IBM Cloud Catalog.
+   - Go to the [Watson Studio](https://cloud.ibm.com/catalog/services/watson-studio) page in the IBM Cloud Catalog.
+   - Make sure the instance will create in Dallas region.
    - Click **Create**.
 
-![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ath12.png)
+![watsonstudiocreate](images/watsonstudiocreate.png)
+
+![watsonstudiocreate](images/ath12.png)
 
    - Click **Get Started**.
- 
- ![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ath13.png)
- 
+
+![watsonstudiocreate](images/ath13.png) 
     
    - Click **Create a Project** > Visual Recognition
  
