@@ -69,6 +69,7 @@ First you set up the services on IBM Cloud. Then you set up the client applicati
    - Go to the [Text-to-Speech](https://cloud.ibm.com/catalog/services/text-to-speech) page in the IBM Cloud Catalog.
    - Click **Create**.
    - Go to Manage and copy the `apikey` value (like in the visual recognition service).
+   - Copy the URL too !!!
    
 4. Create an instance of the Watson Studio and project to train models:
    - Go to the [Watson Studio](https://cloud.ibm.com/catalog/services/watson-studio) page in the IBM Cloud Catalog.
@@ -87,7 +88,7 @@ First you set up the services on IBM Cloud. Then you set up the client applicati
  
 ![emptyproject](images/emptyproject.png)
  
-   - Name the project. Select **Storage** > cloud object storage - clicl **Add**.
+   - Name the project, Select **Storage** > cloud object storage - click **Add**.
  
 ![addstorage](images/addstorage.png)   
 
@@ -166,55 +167,54 @@ We added the following permissions to the manifest file:
 
 The following code was added in the Activity_Login to implement App ID for user authentication. In this game, we're using this service to track the users of the game since it adds authentication method to the app.
 
-```android
-	@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        AppID.getInstance().initialize(getApplicationContext(), getString(R.string.appID_tenantid), AppID.REGION_UK);
+```java
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_login);
+    AppID.getInstance().initialize(getApplicationContext(), getString(R.string.appID_tenantid), AppID.REGION_UK);
 
-        rellay1 = (RelativeLayout) findViewById(R.id.rellay1);
+    rellay1 = (RelativeLayout) findViewById(R.id.rellay1);
 
-        handler.postDelayed(runnable, 2000); //2000 is the timeout for the splash
+    handler.postDelayed(runnable, 2000); //2000 is the timeout for the splash
 
-        btn_login = (Button) findViewById(R.id.btn_login);
-        tv_login = (TextView) findViewById(R.id.tv_login);
-        t_login = (TextView) findViewById(R.id.t_login);
+    btn_login = (Button) findViewById(R.id.btn_login);
+    tv_login = (TextView) findViewById(R.id.tv_login);
+    t_login = (TextView) findViewById(R.id.t_login);
 
-        //When the button "login" is clicked, call the app ID service for authentication
-        btn_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    //When the button "login" is clicked, call the app ID service for authentication
+    btn_login.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
 
-                btn_login.setVisibility(View.GONE);
-                tv_login.setVisibility(View.GONE);
-                t_login.setVisibility(View.VISIBLE);
+            btn_login.setVisibility(View.GONE);
+            tv_login.setVisibility(View.GONE);
+            t_login.setVisibility(View.VISIBLE);
 
 
-                LoginWidget loginWidget = AppID.getInstance().getLoginWidget();
-                loginWidget.launch(Activity_Login.this, new AuthorizationListener() {
-                    @Override
-                    public void onAuthorizationFailure(AuthorizationException exception) {
-                        //Exception occurred
-                    }
+            LoginWidget loginWidget = AppID.getInstance().getLoginWidget();
+            loginWidget.launch(Activity_Login.this, new AuthorizationListener() {
+                @Override
+                public void onAuthorizationFailure(AuthorizationException exception) {
+                    //Exception occurred
+                }
 
-                    @Override
-                    public void onAuthorizationCanceled() {
-                        //Authentication canceled by the user
-                    }
+                @Override
+                public void onAuthorizationCanceled() {
+                    //Authentication canceled by the user
+                }
 
-                    @Override
-                    public void onAuthorizationSuccess(AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
-                        //User authenticated
+                @Override
+                public void onAuthorizationSuccess(AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
+                    //User authenticated
 
-                        //On successful authorization, start the next activity
-                        Intent intent = new Intent(Activity_Login.this, MainActivity.class);
-                        startActivity(intent);
-                    }
-                });
-            }
-        });
-    }
+                    //On successful authorization, start the next activity
+                    Intent intent = new Intent(Activity_Login.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+    });
+}
 ```
 
 
@@ -222,98 +222,98 @@ The following code was added in the Activity_Login to implement App ID for user 
 
 * In level activities, under **onActivityResult** method, The following code was added to implement visual recognition service:
 
-```android
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+```java
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        Bundle extras = data.getExtras();
+        Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-            //convert to file
-            File filesDir = this.getApplicationContext().getFilesDir();
-            photoFile = new File(filesDir, "myphoto" + ".jpg");
+        //convert to file
+        File filesDir = this.getApplicationContext().getFilesDir();
+        photoFile = new File(filesDir, "myphoto" + ".jpg");
 
-            OutputStream os;
-            try {
-                os = new FileOutputStream(photoFile);
-                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-                os.flush();
-                os.close();
-            } catch (Exception e) {
-                Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
-            }
+        OutputStream os;
+        try {
+            os = new FileOutputStream(photoFile);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
+        }
 
-            if (photoFile != null) {
-                t_login.setVisibility(View.VISIBLE);
-                backgroundThread();
-            }
+        if (photoFile != null) {
+            t_login.setVisibility(View.VISIBLE);
+            backgroundThread();
         }
     }
+}
 ```
 
 * In **backgroundThread** method, the following code was added for making the network call, parsing the result from visual recognition service to determine whether to start next activity (Level passed) or not (Level Failed). 
 
-```android
+```java
 private void backgroundThread(){
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                InputStream imagesStream = null;
-                try {
-                    imagesStream = new FileInputStream(photoFile);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
-                        .imagesFile(imagesStream)
-                        .imagesFilename(photoFile.getName())
-                        .threshold((float) 0.6)
-                        .classifierIds(Arrays.asList("Model Number"))
-                        .build();
-                ClassifiedImages result = mVisualRecognition.classify(classifyOptions).execute();
-                Gson gson = new Gson();
-                String json = gson.toJson(result);
-                Log.d("json", json);
-                String name = null;
-                try {
-                    JSONObject jsonObject = new JSONObject(json);
-                    JSONArray jsonArray = jsonObject.getJSONArray("images");
-                    JSONObject jsonObject1 = jsonArray.getJSONObject(0);
-                    JSONArray jsonArray1 = jsonObject1.getJSONArray("classifiers");
-                    JSONObject jsonObject2 = jsonArray1.getJSONObject(0);
-                    JSONArray jsonArray2 = jsonObject2.getJSONArray("classes");
-                    JSONObject jsonObject3 = jsonArray2.getJSONObject(0);
-                    name = jsonObject3.getString("class");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                final String finalName = name;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mTextView.setText("Detected Image: " + finalName);
-
-                        Log.d(TAG, "Ans: " + finalName);
-
-                        if(finalName.equals("Trees")){
-                            Intent mass = new Intent(Main2Activity.this, Main3Activity.class);
-                            startActivity(mass);
-                        }
-                        else {
-                            Toast toast = Toast.makeText(getApplicationContext(), "Sorry. Try Again!", Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                            toast.show();
-                        }
-                    }
-                });
+    AsyncTask.execute(new Runnable() {
+        @Override
+        public void run() {
+            InputStream imagesStream = null;
+            try {
+                imagesStream = new FileInputStream(photoFile);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
-        });
-    }
+            ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
+                    .imagesFile(imagesStream)
+                    .imagesFilename(photoFile.getName())
+                    .threshold((float) 0.6)
+                    .classifierIds(Arrays.asList("Model Number"))
+                    .build();
+            ClassifiedImages result = mVisualRecognition.classify(classifyOptions).execute();
+            Gson gson = new Gson();
+            String json = gson.toJson(result);
+            Log.d("json", json);
+            String name = null;
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                JSONArray jsonArray = jsonObject.getJSONArray("images");
+                JSONObject jsonObject1 = jsonArray.getJSONObject(0);
+                JSONArray jsonArray1 = jsonObject1.getJSONArray("classifiers");
+                JSONObject jsonObject2 = jsonArray1.getJSONObject(0);
+                JSONArray jsonArray2 = jsonObject2.getJSONArray("classes");
+                JSONObject jsonObject3 = jsonArray2.getJSONObject(0);
+                name = jsonObject3.getString("class");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            final String finalName = name;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mTextView.setText("Detected Image: " + finalName);
+
+                    Log.d(TAG, "Ans: " + finalName);
+
+                    if(finalName.equals("Trees")){
+                        Intent mass = new Intent(Main2Activity.this, Main3Activity.class);
+                        startActivity(mass);
+                    }
+                    else {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Sorry. Try Again!", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                        toast.show();
+                    }
+                }
+            });
+        }
+    });
+}
 ```
 
 In the above code, the name of the class should be edited in the following condition in the place of Trees, depending on the names of classes you added in the visual recognition model.
 
-```android
+```java
 if(finalName.equals("Trees")){
     Intent mass = new Intent(Main2Activity.this, Main3Activity.class);
     startActivity(mass);
@@ -324,8 +324,8 @@ if(finalName.equals("Trees")){
 
 * In level activities, the following code was added to implement Text-to-Speech service:
 
-```android
- public void speakhint() {
+```java
+public void speakhint() {
     IamOptions options = new IamOptions.Builder()
             .apiKey(getString(R.string.api_keyTTS))
             .build();
@@ -336,7 +336,7 @@ if(finalName.equals("Trees")){
 
     new SynthesisTask().execute(hint);
 }
- private class SynthesisTask extends AsyncTask<String, Void, String> {
+private class SynthesisTask extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         SynthesizeOptions synthesizeOptions = new SynthesizeOptions.Builder()
