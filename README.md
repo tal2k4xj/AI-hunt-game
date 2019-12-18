@@ -253,59 +253,76 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 * In **backgroundThread** method, the following code was added for making the network call, parsing the result from visual recognition service to determine whether to start next activity (Level passed) or not (Level Failed). 
 
 ```java
-private void backgroundThread(){
+private void backgroundThread() {
     AsyncTask.execute(new Runnable() {
         @Override
         public void run() {
             InputStream imagesStream = null;
             try {
                 imagesStream = new FileInputStream(photoFile);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
-                    .imagesFile(imagesStream)
-                    .imagesFilename(photoFile.getName())
-                    .threshold((float) 0.6)
-                    .classifierIds(Arrays.asList("Model Number"))
-                    .build();
-            ClassifiedImages result = mVisualRecognition.classify(classifyOptions).execute();
-            Gson gson = new Gson();
-            String json = gson.toJson(result);
-            Log.d("json", json);
-            String name = null;
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                JSONArray jsonArray = jsonObject.getJSONArray("images");
-                JSONObject jsonObject1 = jsonArray.getJSONObject(0);
-                JSONArray jsonArray1 = jsonObject1.getJSONArray("classifiers");
-                JSONObject jsonObject2 = jsonArray1.getJSONObject(0);
-                JSONArray jsonArray2 = jsonObject2.getJSONArray("classes");
-                JSONObject jsonObject3 = jsonArray2.getJSONObject(0);
-                name = jsonObject3.getString("class");
+                ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
+                        .imagesFile(imagesStream)
+                        .imagesFilename(photoFile.getName())
+                        .threshold((float) 0.6)
+                        .classifierIds(Arrays.asList(getString(R.string.VR_modelid)))
+                        .build();
+                ClassifiedImages result = mVisualRecognition.classify(classifyOptions).execute();
+                Gson gson = new Gson();
+                String json = gson.toJson(result);
+                Log.d("json", json);
+                String name = null;
+                try {
+                    JSONObject jsonObject = new JSONObject(json);
+                    JSONArray jsonArray = jsonObject.getJSONArray("images");
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(0);
+                    JSONArray jsonArray1 = jsonObject1.getJSONArray("classifiers");
+                    JSONObject jsonObject2 = jsonArray1.getJSONObject(0);
+                    JSONArray jsonArray2 = jsonObject2.getJSONArray("classes");
+                    JSONObject jsonObject3 = jsonArray2.getJSONObject(0);
+                    name = jsonObject3.getString("class");
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            final String finalName = name;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mTextView.setText("Detected Image: " + finalName);
-
-                    Log.d(TAG, "Ans: " + finalName);
-
-                    if(finalName.equals("Trees")){
-                        Intent mass = new Intent(Main2Activity.this, Main3Activity.class);
-                        startActivity(mass);
-                    }
-                    else {
-                        Toast toast = Toast.makeText(getApplicationContext(), "Sorry. Try Again!", Toast.LENGTH_LONG);
-                        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                        toast.show();
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            });
+                final String finalName = name;
+                final MediaPlayer mp = MediaPlayer.create(Level1.this, R.raw.fail);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        t_login.setVisibility(View.GONE);
+                        Log.d(TAG, "Ans: " + finalName);
+
+                        if (finalName != null) {
+
+                            //if the class returned is Trees, go to the next level
+                            if (finalName.equals("Trees")) {
+                                Intent mass = new Intent(Level1.this, Level2.class);
+                                startActivity(mass);
+                            } else {
+
+
+                                mp.start(); //play the audio for failing the level
+                                Toast toast = Toast.makeText(getApplicationContext(), "Sorry. Try Again!", Toast.LENGTH_LONG);
+                                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                                toast.show();
+
+                                t_login.setVisibility(View.GONE);
+
+                            }
+                        } else {
+
+                            mp.start();
+                            Toast toast = Toast.makeText(getApplicationContext(), "Sorry. Try Again!", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                            toast.show();
+
+                            t_login.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     });
 }
@@ -330,10 +347,8 @@ public void speakhint() {
             .apiKey(getString(R.string.api_keyTTS))
             .build();
     textToSpeech = new TextToSpeech(options);
-	
     //Add the url from service credentials
-    textToSpeech.setEndPoint("add url here");
-
+    textToSpeech.setEndPoint(getString(R.string.url_TTS));
     new SynthesisTask().execute(hint);
 }
 private class SynthesisTask extends AsyncTask<String, Void, String> {

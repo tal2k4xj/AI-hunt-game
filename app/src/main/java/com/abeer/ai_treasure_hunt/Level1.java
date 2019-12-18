@@ -104,19 +104,19 @@ public class Level1 extends AppCompatActivity {
         }
     }
 
-    public void onBackPressed(){
+    public void onBackPressed() {
         finish();
 
     }
 
-    private void auth(){
+    private void auth() {
         IamOptions options = new IamOptions.Builder()
                 .apiKey(getString(R.string.api_keyVR))
                 .build();
         mVisualRecognition = new VisualRecognition("2018-03-19", options);
     }
 
-    public void captureImage(){
+    public void captureImage() {
 
         Button button = (Button) findViewById(R.id.btn_capture);
         button.setOnClickListener(new View.OnClickListener() {
@@ -171,15 +171,10 @@ public class Level1 extends AppCompatActivity {
         IamOptions options = new IamOptions.Builder()
                 .apiKey(getString(R.string.api_keyTTS))
                 .build();
-
         textToSpeech = new TextToSpeech(options);
-
-
         //Add the url from service credentials
         textToSpeech.setEndPoint(getString(R.string.url_TTS));
-
         new SynthesisTask().execute(hint);
-
     }
 
     //For text to speech service
@@ -196,18 +191,13 @@ public class Level1 extends AppCompatActivity {
         }
     }
 
-    private void backgroundThread(){
-
+    private void backgroundThread() {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-
                 InputStream imagesStream = null;
                 try {
                     imagesStream = new FileInputStream(photoFile);
-
-
-
                     ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
                             .imagesFile(imagesStream)
                             .imagesFilename(photoFile.getName())
@@ -233,24 +223,17 @@ public class Level1 extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     final String finalName = name;
-
-                    final MediaPlayer mp = MediaPlayer.create(Level1.this,R.raw.fail);
-
-
+                    final MediaPlayer mp = MediaPlayer.create(Level1.this, R.raw.fail);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
-
-
                             t_login.setVisibility(View.GONE);
                             Log.d(TAG, "Ans: " + finalName);
 
-                            if(finalName != null){
+                            if (finalName != null) {
 
                                 //if the class returned is Trees, go to the next level
-                                if (finalName.equals("Trees"))
-                                {
+                                if (finalName.equals("Trees")) {
                                     Intent mass = new Intent(Level1.this, Level2.class);
                                     startActivity(mass);
                                 } else {
@@ -263,10 +246,8 @@ public class Level1 extends AppCompatActivity {
 
                                     t_login.setVisibility(View.GONE);
 
-                                }}
-
-                            else
-                            {
+                                }
+                            } else {
 
                                 mp.start();
                                 Toast toast = Toast.makeText(getApplicationContext(), "Sorry. Try Again!", Toast.LENGTH_LONG);
@@ -275,25 +256,12 @@ public class Level1 extends AppCompatActivity {
 
                                 t_login.setVisibility(View.GONE);
                             }
-
-
                         }
                     });
-
                 } catch (Exception e) {
                     e.printStackTrace();
-
-
-
                 }
-
-
-
-                }
-
-
-
+            }
         });
-
     }
 }
