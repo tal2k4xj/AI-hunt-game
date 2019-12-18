@@ -70,205 +70,144 @@ First you set up the services on IBM Cloud. Then you set up the client applicati
    - Click **Create**.
    - Go to Manage and copy the `apikey` value (like in the visual recognition service).
    
-4. Create an instance of the Watson Studio
+4. Create an instance of the Watson Studio and project to train models:
    - Go to the [Watson Studio](https://cloud.ibm.com/catalog/services/watson-studio) page in the IBM Cloud Catalog.
    - Make sure the instance will create in Dallas region.
    - Click **Create**.
 
 ![watsonstudiocreate](images/watsonstudiocreate.png)
 
-@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@
-@@@@@@@@@@@@@@@@@@@@@
-
-![watsonstudiocreate](images/ath12.png)
+![watsonstudiogetstarted](images/watsonstudiogetstarted.png)
 
    - Click **Get Started**.
 
-![watsonstudiocreate](images/ath13.png) 
+![createproj](images/createproj.png) 
     
-   - Click **Create a Project** > Visual Recognition
+   - Click **Create a Project** > empty project.
  
- ![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ath14.png)
+![emptyproject](images/emptyproject.png)
  
+   - Name the project. Select **Storage** > cloud object storage - clicl **Add**.
+ 
+![addstorage](images/addstorage.png)   
 
-   - Name the project. Select **Storage** > cloud object storage. **Create**
+   - Select **New** scroll down and click **Create**.
  
-4. Creating Visual Recognition Models 
+![createstorage](images/createstorage.png)
 
-   - Click **Create a Class**. Give it a name. Create at least 2 classes. In this tutorial, 5 classes: "Trees", "BurjKhalifa",   "BurjArab", "MiracleGarden", and "GlowGarden".
-   - Upload the zip files for the dataset. **Upload to Project** > Browse > Choose folder.
-   - Open the class you want to add the dataset to. Click on the uploaded zip folder on the right > **Add to Model**
-
- ![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ath19.png) 
+   - Select **Confirm**.
  
-   - Once this is added, Click **Train Model**. This will take some time.
-   
-![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ath22.png)   
-    
- To change the name of the model, edit the following field:
- 
- ![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ath23.png) 
- 
- **Updated name of the Model**
- 
- ![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ath24.png) 
+![confirmstorage](images/confirmstorage.png)
 
-5. Go back to Projects 
+   - Select **Refresh** and you will see the storage you just create, Click **Create**.
+ 
+![refreshandcreateproj](images/refreshandcreateproj.png)
+ 
+5. Add your Data to train the model :
+   - Clone this [repo](https://github.com/tal2k4xj/AI-hunt-game).
+   - Select **Find and Add data**.
+	
+![findandadddata](images/findandadddata.png)
 
-![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ath25.png) 
+   - Go to the cloned repo and select all the zip files under **datasets** folder
 
-  - Click on the Project Name.
+![addzip](images/addzip.png)
+
+
+6. Creating Visual Recognition Models 
+
+   - Click **Add to project** and click on the **Visual Recognition**.
   
-![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ath26.png) 
+![addvrmodel](images/addvrmodel.png)
 
-  - Copy the Model ID provided. 
+   - Click **here** to connect this to our Visual Recognition (VR) service we created earlier.
+  
+![connecttovr](images/connecttovr.png)
+
+   - On **Existing** click on the drop down list and select your VR service then click **Select**.
+  
+![selectvrservice](images/selectvrservice.png)
+
+   - Now that you have project associated with the VR service you can create your own model by clickling **Create Model** under Classify Images.
+  
+![createmodel](images/createmodel.png)
+
+   - On the right side you will see all the zip files that you uploaded before, select all of them and click **Add to model**, also give your model a name.
+  
+![modelnameandzip](images/modelnameandzip.png)
+
+   - After you loaded all images you can now Train your model, click on **Train Model** and you can leave this for now and we will come back when it will be ready.
+  
+![trainmodel](images/trainmodel.png)
+
+## Code
  
 **Set up the client application: Android App**
 
-* Clone this repo.
-* Start **Android Studio** and **open project**.
-* In Android Studio under **Gradle Scripts/build.gradle (Module:app)**. Add 
+* Start **Android Studio** and **open project**, select the repo you cloned few minutes ago.
+* In Android Studio under **Gradle Scripts/build.gradle (Module:app)**. you will see the following dependencies.
 
-For App ID 
+![androiddependencies](images/androiddependencies.png)
 
-``` 
-    implementation 'com.github.ibm-cloud-security:appid-clientsdk-android:5.0.0'   
-``` 
-Android SDK for IBM Watson
+We will use them to connect our cloud services (Visual Recognition, App ID, Text to Speech).
 
-``` 
-    implementation 'com.ibm.watson.developer_cloud:android-sdk:0.5.0'  
-```
-Java SDK for IBM Watson
-
-``` 
-    implementation 'com.ibm.watson.developer_cloud:java-sdk:6.13.1' 
-``` 
-   
-in the **dependencies block**.
-
- **App ID**
- 
- 
-* Add this in defaultConfig in the same gradle file
- 
- ``` 
-    manifestPlaceholders = ['appIdRedirectScheme': android.defaultConfig.applicationId]
-   ``` 
- 
- * Click on **Sync Now**
- 
 **Manifest File**
 
-Add the following permissions to the manifest file:
+We added the following permissions to the manifest file:
 
-```
+```xml
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 ```
 
-**Credentials**
-
-1. Add the tenant ID from App ID credentials in the following line of code in Activity_Login:
-
-```
-AppID.getInstance().initialize(getApplicationContext(), "tenant id", AppID.REGION_US_SOUTH); 
-
-```
-
-2. Add the Credentials for Visual Recognition.
-
-   Edit the api key in strings.xml file 
-
-``` <string name="api_key">api key</string> ```
-
-3. Add the Credentials for Text-to-Speech.
-
-   Edit the api key in strings.xml file 
-
-``` <string name="api_keyTTS">api key for text to speech</string> ```
-
-   Add the url in the code below from service credentials (for all Level Activities under **speakhint** ):
-   
-```
-     public void speakhint() {
-        IamOptions options = new IamOptions.Builder()
-                .apiKey(getString(R.string.api_keyTTS))
-                .build();
-
-        textToSpeech = new TextToSpeech(options);
-
-
-        //Add the url from service credentials
-        textToSpeech.setEndPoint("add url here");
-
-        new SynthesisTask().execute(hint);
-```
-
-
-
-4. Add the Model ID in the following line of code in all Level Activities(Level1, Level2, Level3, Level4 and Level5).
-                        
-```
-ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
-                        .imagesFile(imagesStream)
-                        .imagesFilename(photoFile.getName())
-                        .threshold((float) 0.6)
-                        .classifierIds(Arrays.asList("Model ID"))
-                        .build();
-```
-
-Once you’ve followed the instructions above to add credentials (Model ID, api keys and tenant ID), You're Done! Run the app. Play the Game!
-
-## Code
-
 **App ID Login**
 
 The following code was added in the Activity_Login to implement App ID for user authentication. In this game, we're using this service to track the users of the game since it adds authentication method to the app.
 
-```
-    @Override
+```android
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        AppID.getInstance().initialize(getApplicationContext(), "tenant id", AppID.REGION_US_SOUTH);
+        AppID.getInstance().initialize(getApplicationContext(), getString(R.string.appID_tenantid), AppID.REGION_UK);
+
+        rellay1 = (RelativeLayout) findViewById(R.id.rellay1);
+
         handler.postDelayed(runnable, 2000); //2000 is the timeout for the splash
 
         btn_login = (Button) findViewById(R.id.btn_login);
+        tv_login = (TextView) findViewById(R.id.tv_login);
+        t_login = (TextView) findViewById(R.id.t_login);
+
+        //When the button "login" is clicked, call the app ID service for authentication
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 btn_login.setVisibility(View.GONE);
-             
+                tv_login.setVisibility(View.GONE);
+                t_login.setVisibility(View.VISIBLE);
+
+
                 LoginWidget loginWidget = AppID.getInstance().getLoginWidget();
                 loginWidget.launch(Activity_Login.this, new AuthorizationListener() {
                     @Override
-                    public void onAuthorizationFailure (AuthorizationException exception) {
+                    public void onAuthorizationFailure(AuthorizationException exception) {
                         //Exception occurred
                     }
 
                     @Override
-                    public void onAuthorizationCanceled () {
+                    public void onAuthorizationCanceled() {
                         //Authentication canceled by the user
                     }
 
                     @Override
-                    public void onAuthorizationSuccess (AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
+                    public void onAuthorizationSuccess(AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
                         //User authenticated
 
+                        //On successful authorization, start the next activity
                         Intent intent = new Intent(Activity_Login.this, MainActivity.class);
                         startActivity(intent);
                     }
@@ -283,27 +222,38 @@ The following code was added in the Activity_Login to implement App ID for user 
 
 * In level activities, under **onActivityResult** method, The following code was added to implement visual recognition service:
 
-```
-@Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+```android
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
 
-        if (requestCode == CameraHelper.REQUEST_IMAGE_CAPTURE) {
-            final Bitmap photo = mCameraHelper.getBitmap(resultCode);
-            photoFile = mCameraHelper.getFile(resultCode);
-            //  mImageView.setImageBitmap(photo);
+            //convert to file
+            File filesDir = this.getApplicationContext().getFilesDir();
+            photoFile = new File(filesDir, "myphoto" + ".jpg");
 
-            backgroundThread();
+            OutputStream os;
+            try {
+                os = new FileOutputStream(photoFile);
+                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                os.flush();
+                os.close();
+            } catch (Exception e) {
+                Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
+            }
 
+            if (photoFile != null) {
+                t_login.setVisibility(View.VISIBLE);
+                backgroundThread();
+            }
         }
     }
 ```
 
 * In **backgroundThread** method, the following code was added for making the network call, parsing the result from visual recognition service to determine whether to start next activity (Level passed) or not (Level Failed). 
 
-```
+```android
 private void backgroundThread(){
-
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -338,10 +288,6 @@ private void backgroundThread(){
                     e.printStackTrace();
                 }
                 final String finalName = name;
-
-
-
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -354,71 +300,79 @@ private void backgroundThread(){
                             startActivity(mass);
                         }
                         else {
-
                             Toast toast = Toast.makeText(getApplicationContext(), "Sorry. Try Again!", Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                             toast.show();
-
                         }
-
-
                     }
                 });
-
-
             }
         });
-
     }
 ```
 
 In the above code, the name of the class should be edited in the following condition in the place of Trees, depending on the names of classes you added in the visual recognition model.
 
-```
- if(finalName.equals("Trees")){
-                            Intent mass = new Intent(Main2Activity.this, Main3Activity.class);
-                            startActivity(mass);
-                        }
+```android
+if(finalName.equals("Trees")){
+    Intent mass = new Intent(Main2Activity.this, Main3Activity.class);
+    startActivity(mass);
+}
                         
 ```
 **Text-to-Speech**
 
 * In level activities, the following code was added to implement Text-to-Speech service:
 
-```
+```android
  public void speakhint() {
-        IamOptions options = new IamOptions.Builder()
-                .apiKey(getString(R.string.api_keyTTS))
-                .build();
+    IamOptions options = new IamOptions.Builder()
+            .apiKey(getString(R.string.api_keyTTS))
+            .build();
+    textToSpeech = new TextToSpeech(options);
+	
+    //Add the url from service credentials
+    textToSpeech.setEndPoint("add url here");
 
-        textToSpeech = new TextToSpeech(options);
-
-
-        //Add the url from service credentials
-        textToSpeech.setEndPoint("add url here");
-
-        new SynthesisTask().execute(hint);
-
-    }
-    
+    new SynthesisTask().execute(hint);
+}
  private class SynthesisTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            SynthesizeOptions synthesizeOptions = new SynthesizeOptions.Builder()
-                    .text(params[0])
-                    .voice(speakLanguage)
-                    .accept(SynthesizeOptions.Accept.AUDIO_WAV)
-                    .build();
-            player.playStream(textToSpeech.synthesize(synthesizeOptions).execute());
-            return "Did synthesize";
-        }
+    @Override
+    protected String doInBackground(String... params) {
+        SynthesizeOptions synthesizeOptions = new SynthesizeOptions.Builder()
+                .text(params[0])
+                .voice(speakLanguage)
+                .accept(SynthesizeOptions.Accept.AUDIO_WAV)
+                .build();
+        player.playStream(textToSpeech.synthesize(synthesizeOptions).execute());
+        return "Did synthesize";
     }
-
+}
 ```
+
+**Credentials**
+
+* To add all the credentials you copied go to the `strings.xml` and paste them in the right place :
+
+![addcreds](images/addcreds.png)
+
+* You still miss one more this before you can run the application and this is the **Model ID / Classifier ID**, to get that you can back to your project : https://dataplatform.cloud.ibm.com/
+
+* Click on the Navigation menu, under Services select **Watson services**.
+
+![watsonservices](images/watsonservices.png)
+
+* Click **Launch tool**.
+
+![launchvrtool](images/launchvrtool.png)
+
+* **Copy classifier ID** and paste it in the `VR_modelid` in the strings.xml.
+
+![copymodelid](images/copymodelid.png)
 
 #### Architecture
 
- ![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ArchitectureDiagram.png) 
+![ArchitectureDiagram](images/ArchitectureDiagram.png)
 
 ## Summary
 This tutorial introduced visual recognition models by showing how to build a fun treasure hunt game. You started by creating services on the IBM Cloud platform. Then you built the application on the client side and there you have it!

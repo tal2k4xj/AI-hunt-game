@@ -13,9 +13,9 @@
     <string name="level_2">level 2</string>
     <string name="back">back</string>
     <string name="level_1">level 1</string>
-    <string name="api_keyVR">7r8B80NxPmqdrOnLgQk8HLjyflXpmqoq4E1j1Vgb51JZ</string>
-    <string name="api_keyTTS">fYYR1BVpBSethcXRutxrZ4AZ3I-Kjp6YDCtp4t-KEE6d</string>
-    <string name="url_TTS">https://gateway-lon.watsonplatform.net/text-to-speech/api</string>
-    <string name="appID_tenantid">eeabe7e2-826a-4b83-9525-32f0801e7ddb</string>
-    <string name="VR_modelid">AITreasureHunt_1552858306</string>
+    <string name="api_keyVR">PASTE HERE!!!</string>
+    <string name="api_keyTTS">PASTE HERE!!!</string>
+    <string name="url_TTS">PASTE HERE!!!</string>
+    <string name="appID_tenantid">PASTE HERE!!!</string>
+    <string name="VR_modelid">PASTE HERE!!!</string>
 </resources>

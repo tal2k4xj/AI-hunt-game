@@ -23,7 +23,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.ibm.watson.developer_cloud.android.library.audio.StreamPlayer;
-import com.ibm.watson.developer_cloud.android.library.camera.CameraHelper;
 import com.ibm.watson.developer_cloud.service.security.IamOptions;
 import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
 import com.ibm.watson.developer_cloud.text_to_speech.v1.model.SynthesizeOptions;
@@ -59,7 +58,6 @@ public class Level1 extends AppCompatActivity {
 
 
     private VisualRecognition mVisualRecognition;
-    private CameraHelper mCameraHelper;
     private File photoFile;
     private static final String TAG = "Level1";
 
@@ -75,17 +73,13 @@ public class Level1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
 
         mTextView = (TextView) findViewById(R.id.text_view_main);
         t_login = (TextView) findViewById(R.id.t_login);
-        mCameraHelper = new CameraHelper(this);
 
         btn_capture = findViewById(R.id.btn_capture);
         auth();
