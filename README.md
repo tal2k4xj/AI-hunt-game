@@ -400,13 +400,6 @@ Do more with App ID: https://github.com/ibm-cloud-security/appid-clientsdk-andro
 
 Developing an image classifier: https://github.com/sudoalgorithm/Developing-A-Image-Classifier-Using-Watson-Visual-Recognition-On-Watson-Studio
 
-
-## Contributors
-
-[Kunal Malhotra](https://github.com/sudoalgorithm) 
-
-[Ayush Maan](https://github.com/ayushmaan6) 
-
-[Anchal Bhalla](https://github.com/anchalbhalla/) 
+git Abeer-Haroon/AI-Treasure-Hunt-With-Watson: https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/
 
 
